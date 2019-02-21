@@ -14,5 +14,5 @@ module.exports = {
   nodeModules: resolve("../node_modules"),
   packageFile: resolve("../package.json"),
   packageLockFile: resolve("../package-lock.json"),
-  staticPath: "property/static"
+  staticPath: "./static"
 };

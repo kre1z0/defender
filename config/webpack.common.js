@@ -85,11 +85,11 @@ module.exports = {
       }
     }),
     new HTMLPlugin({
-      title: "Tinkoff",
+      title: "Где и как отметить 23 февраля в Москве",
       template,
       minify: true,
       filename: "index.html",
-      favicon: "favicon.png"
+      favicon: "public/favicon.png"
     }),
     new WebpackCdnPlugin({
       modules: [

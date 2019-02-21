@@ -2,7 +2,7 @@
   "name": "defender",
   "version": "1.0.0",
   "private": false,
-  "homepage": "https://github.com/Everpoint/everpoint-site.git",
+  "homepage": "https://github.com/kre1z0/defender",
   "description": "defender of motherland",
   "keywords": [
     "map",
@@ -22,20 +22,22 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --config ./config/webpack.dev.js --host 0.0.0.0 --hot --progress --inline",
-    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js"
+    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
+    "deploy": "git remote set-url origin https://github.com/kre1z0/kre1z0.github.io.git && npm run build && gh-pages -d dist -b master && git remote set-url origin https://github.com/kre1z0/defender"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.51",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
     "@evergis/sgis": "^0.4.5",
     "@evergis/sp-api": "^0.4.17",
-    "@evergis/ui": "^0.1.51"
+    "@evergis/ui": "^0.1.51",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "styled-components": "^3.4.2"
   },
   "devDependencies": {
-    "gh-pages": "^2.0.1",
     "@babel/cli": "^7.0.0-beta.49",
     "@babel/core": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.49",
     "@babel/plugin-transform-runtime": "^7.0.0-beta.49",
     "@babel/preset-env": "^7.0.0-beta.49",
@@ -53,9 +55,10 @@
     "cross-env": "^5.1.6",
     "css-loader": "0.28.1",
     "file-loader": "^1.1.11",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
     "loadable-components": "^2.2.2",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.11.0",
     "postcss-flexbugs-fixes": "^3.2.0",
     "postcss-loader": "2.0.5",
     "prettier": "^1.13.5",
@@ -67,6 +70,6 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.10",
     "webpack-merge": "^4.1.2",
-    "webpack-node-externals": "^1.7.2",
+    "webpack-node-externals": "^1.7.2"
   }
 }

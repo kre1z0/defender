@@ -7,11 +7,11 @@ const { entry, dist, root } = require("./paths");
 module.exports = merge(common, {
   entry: {
     useBuiltIns: "@babel/polyfill",
-    app: [entry],
+    app: [entry]
   },
   output: {
-    publicPath: "./",
+    publicPath: "./feb23"
   },
   devtool: "source-map",
-  plugins: [new CleanWebpackPlugin([dist], { root })],
+  plugins: [new CleanWebpackPlugin([dist], { root })]
 });

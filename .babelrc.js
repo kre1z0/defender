@@ -17,17 +17,16 @@ const presets = [
       modules: false,
     },
   ],
-  ["@babel/preset-stage-2", { decoratorsLegacy: true }],
   "@babel/preset-react",
 ];
 
 const plugins = [
-  ["babel-plugin-styled-components", { displayName: isDev, ssr: true }],
-  "transform-object-assign",
+  ["babel-plugin-styled-components", { displayName: isDev }],
   "@babel/plugin-syntax-dynamic-import",
+  ["@babel/plugin-proposal-class-properties", { loose: false }],
   "@babel/plugin-transform-runtime",
-  "loadable-components/babel",
-];
+  "transform-object-assign",
+]
 
 module.exports = {
   plugins,

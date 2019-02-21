@@ -4,7 +4,7 @@ const common = require("./webpack.common");
 const proxy = require("./webpack.proxy.settings");
 const { entry, dist, root } = require("./paths");
 
-const port = 9004;
+const port = 8444;
 
 module.exports = merge(common, {
   entry: {
