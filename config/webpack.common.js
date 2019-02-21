@@ -3,7 +3,7 @@ const HTMLPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const WebpackCdnPlugin = require("webpack-cdn-plugin");
 const autoprefixer = require("autoprefixer");
-const { dist, src, public, nodeModules, template, staticPath } = require("./paths");
+const { dist, src, public, nodeModules, template, staticPath, evergis, sgis } = require("./paths");
 const babelOptions = require("../.babelrc");
 
 module.exports = {
@@ -16,10 +16,32 @@ module.exports = {
 
   resolve: {
     modules: [src, nodeModules],
-    extensions: [".js", "jsx", ".json"]
+    extensions: [".ts", ".tsx", ".js", "jsx", ".json"],
+    alias: {
+      "@evergis/sp-api": evergis,
+      "@evergis/sgis": sgis,
+      evergis,
+      sgis
+    }
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: babelOptions
+          },
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true
+            }
+          }
+        ],
+        exclude: /node_modules\/(?![@evergis])/
+      },
       {
         test: /\.(js|jsx)$/,
         loader: "babel-loader",
