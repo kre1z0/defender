@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import { init, TileLayer, Point } from "@evergis/sgis";
 
 import { MapWrapper } from "./styled";
+import { Filters } from "../../components/Filters/Filters";
 import { Controls } from "../../components/Atoms/Controls";
 import { GridLegend } from "../../components/GridLegend/GridLegend";
 import { ScaleControl } from "../../components/ScaleControl/ScaleControl";
 
 export class Map extends Component {
   state = {
-    resolution: 11
+    resolution: 11,
+    zoomLvl: 0
   };
 
   componentDidMount() {
@@ -27,7 +29,7 @@ export class Map extends Component {
 
     map.maxResolution = 9601;
     this.map = map;
-
+    this.setState({ zoomLvl: this.getLevel(resolution) });
     this.map.on("bboxChangeEnd", this.onBboxChangeEnd);
   }
 
@@ -36,8 +38,10 @@ export class Map extends Component {
   }
 
   onBboxChangeEnd = () => {
+    const resolution = this.map.resolution;
     this.setState({
-      resolution: this.map.resolution
+      zoomLvl: this.getLevel(resolution),
+      resolution
     });
   };
 
@@ -49,13 +53,26 @@ export class Map extends Component {
     this.map.zoom(value);
   };
 
+  getLevel = resolution => {
+    const index = this.map && this.map.tileScheme.getLevel(resolution);
+
+    if (index) {
+      return this.map.tileScheme.levels[index].zIndex;
+    }
+  };
+
+  onFilterChange = value => {
+    console.info("--> onFilterChange ggwp", value);
+  }
+
   render() {
-    const { resolution } = this.state;
+    const { resolution, zoomLvl } = this.state;
 
     return (
       <MapWrapper innerRef={this.onRef}>
+        <Filters onFilterChange={this.onFilterChange} />
         <Controls>
-          <ScaleControl onZoom={this.onZoom} resolution={resolution} />
+          <ScaleControl zoomLvl={zoomLvl} onZoom={this.onZoom} resolution={resolution} />
           <GridLegend />
         </Controls>
       </MapWrapper>
