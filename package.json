@@ -1,0 +1,72 @@
+{
+  "name": "defender",
+  "version": "1.0.0",
+  "private": false,
+  "homepage": "https://github.com/Everpoint/everpoint-site.git",
+  "description": "defender of motherland",
+  "keywords": [
+    "map",
+    "gis",
+    "react",
+    "es6",
+    "sgis"
+  ],
+  "author": {
+    "name": "Igor Ivchuk",
+    "url": "https://github.com/kre1z0"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack-dev-server --config ./config/webpack.dev.js --host 0.0.0.0 --hot --progress --inline",
+    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0-beta.51",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "@evergis/sgis": "^0.4.5",
+    "@evergis/sp-api": "^0.4.17",
+    "@evergis/ui": "^0.1.51"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1",
+    "@babel/cli": "^7.0.0-beta.49",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.49",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "@babel/preset-react": "^7.0.0-beta.49",
+    "@babel/preset-stage-2": "^7.0.0-beta.49",
+    "@babel/runtime": "^7.0.0-beta.53",
+    "autoprefixer": "^8.6.5",
+    "babel-loader": "^8.0.0-beta.3",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
+    "babel-plugin-styled-components": "^1.8.0",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-preset-react-app": "^3.0.0",
+    "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.5.1",
+    "cross-env": "^5.1.6",
+    "css-loader": "0.28.1",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "loadable-components": "^2.2.2",
+    "node-sass": "^4.10.0",
+    "postcss-flexbugs-fixes": "^3.2.0",
+    "postcss-loader": "2.0.5",
+    "prettier": "^1.13.5",
+    "sass-loader": "^6.0.5",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.10.2",
+    "webpack-cdn-plugin": "^2.0.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.2",
+    "webpack-node-externals": "^1.7.2",
+  }
+}
