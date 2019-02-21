@@ -1,27 +1,26 @@
 import React from "react";
-import { darkTheme, ThemeProvider, RadioGroup, IconToggle } from "@evergis/ui";
+import { IconToggle } from "@evergis/ui";
 
-import { FiltersContainer, Title } from "./styled";
+import { FiltersContainer, Title, FilterItem, Label } from "./styled";
 
 const filters = [
-  { id: "1", label: "Поесть и выпить", icon: "" },
-  { id: "2", label: "Спорт и экстрим", icon: "" },
-  { id: "3", label: "Развлечения и хобби", icon: "" },
-  { id: "4", label: "Релакс", icon: "" },
-  { id: "5", label: "Стиль", icon: "" }
+  { id: "1", label: "Поесть и выпить", icon: "password-show" },
+  { id: "2", label: "Спорт и экстрим", icon: "share" },
+  { id: "3", label: "Развлечения и хобби", icon: "phone" },
+  { id: "4", label: "Релакс", icon: "social_github" },
+  { id: "5", label: "Стиль", icon: "image" }
 ];
 
 export const Filters = ({ value, onFilterChange }) => {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <FiltersContainer>
-        <Title>Праздничное наступление</Title>
-        <RadioGroup name="filters" value={value} onChange={onFilterChange} column>
-          {filters.map(({ label }) => (
-            <IconToggle kind="zoom">{label}</IconToggle>
-          ))}
-        </RadioGroup>
-      </FiltersContainer>
-    </ThemeProvider>
+    <FiltersContainer>
+      <Title>Праздничное наступление</Title>
+      {filters.map(({ id, label, icon }) => (
+        <FilterItem key={id} onClick={() => onFilterChange(id)}>
+          <IconToggle kind={icon} accent isSelected={id === value} />
+          <Label>{label}</Label>
+        </FilterItem>
+      ))}
+    </FiltersContainer>
   );
 };

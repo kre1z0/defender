@@ -39,5 +39,4 @@ export const LabelsContainer = styled("div")`
 export const Label = styled("span")`
   font-size: 10px;
   color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.1px;
 `;

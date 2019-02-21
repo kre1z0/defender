@@ -5,7 +5,7 @@ import { Blank } from "../../components/Atoms/Blank";
 export const ScaleControlContainer = styled(Blank)`
   width: 214px;
   margin-right: 10px;
-  padding-right: 15px;
+  padding: 0 15px 0 5px;
   align-items: center;
   height: 100%;
 `;

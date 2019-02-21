@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { darkTheme, ThemeProvider } from "@evergis/ui";
 
-export const ControlsContainer = styled("div")`
+export const Controls = styled("div")`
   position: absolute;
   display: flex;
   height: 40px;
@@ -10,9 +9,3 @@ export const ControlsContainer = styled("div")`
   left: 20px;
   z-index: 4;
 `;
-
-export const Controls = ({ children }) => (
-  <ThemeProvider theme={darkTheme}>
-    <ControlsContainer>{children}</ControlsContainer>
-  </ThemeProvider>
-);
