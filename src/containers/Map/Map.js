@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { SpatialProcessor } from "@evergis/sp-api/SpatialProcessor";
 import { Bbox } from "sgis/Bbox";
 import { Polygon } from "sgis/features/Polygon";
+import { FeatureLayer } from "sgis/layers/FeatureLayer";
+import { PointSymbol } from "sgis/symbols/point/Point";
+import { MaskedImage } from "sgis/symbols/point/MaskedImage";
 import { PointFeature } from "sgis/features/PointFeature";
 import { Connector } from "evergis/Connector";
 import { DataViewService } from "evergis/services/DataViewService";
@@ -11,6 +14,8 @@ import { ServiceGroupService } from "evergis/services/ServiceGroupService";
 import { StaticSourceService } from "evergis/services/StaticSourceService";
 import { TileService } from "evergis/services/TileService";
 
+import circleBack from "./circle_back.png";
+import starImage from "./star.png";
 import { MapWrapper } from "./styled";
 import { License } from "../../components/License/License";
 import { Filters } from "../../components/Filters/Filters";
@@ -54,6 +59,17 @@ export class Map extends Component {
     objects: []
   };
 
+  selectedSymbol = new MaskedImage({
+    width: 32,
+    height: 32,
+    anchorPoint: [16, 16],
+    imageSource: circleBack,
+    maskSource: starImage,
+    maskColor: "#e00f00"
+  });
+
+  layer = new FeatureLayer();
+
   componentDidMount() {
     this.init();
   }
@@ -77,9 +93,13 @@ export class Map extends Component {
 
   setObjects = features => {
     const objects = [];
-    features.forEach(({ attributes, bbox }) => {
+    features.forEach(feature => {
+      const { attributes, bbox, position } = feature;
       const { name, address, site, site_2gis, phone, rubrics_te } = attributes;
       const { xMin, xMax, yMax, yMin } = bbox;
+
+      this.setSelectedSymbol(position);
+
       objects.push({
         name,
         address,
@@ -96,6 +116,12 @@ export class Map extends Component {
       });
     });
     this.setState({ objects, selectedObjectIndex: 0 });
+  };
+
+  setSelectedSymbol = position => {
+    const Point = new PointFeature(position, { symbol: this.selectedSymbol, crs: this.map.crs });
+    this.layer.features = [];
+    this.layer.add([Point]);
   };
 
   onMapClick = ({ point }) => {
@@ -145,6 +171,7 @@ export class Map extends Component {
     map.maxResolution = 9444;
     map.on("bboxChangeEnd", this.onBboxChangeEnd);
     map.on("click", this.onMapClick);
+    map.addLayer(this.layer);
     this.map = map;
     this.sp = sp;
     this.painter = painter;
@@ -238,7 +265,10 @@ export class Map extends Component {
     this.painter.show(bbox, true);
   };
 
-  onCloseObjectCard = () => this.setState({ selectedObjectIndex: 0, objects: [] });
+  onCloseObjectCard = () => {
+    this.layer.features = [];
+    this.setState({ selectedObjectIndex: 0, objects: [] });
+  };
 
   render() {
     const { resolution, zoomLvl, selectedFilter, selectedType, objects, selectedObjectIndex } = this.state;

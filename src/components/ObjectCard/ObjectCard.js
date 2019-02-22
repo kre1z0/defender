@@ -36,7 +36,7 @@ export const ObjectCard = props => {
             onNext={onNextObject}
           />
         )}
-        <IconButton kind="zoom-to" onClick={() => zoomToFeature(extent)} />
+        {/*<IconButton kind="zoom-to" onClick={() => zoomToFeature(extent)} />*/}
         <IconButton kind="close" onClick={onClose} />
       </Header>
       <ChipsContainer>
