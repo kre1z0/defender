@@ -35,6 +35,7 @@ export const Label = styled("span")`
 `;
 
 export const Attention = styled("span")`
+  cursor: pointer;
   font-size: 12px;
   position: absolute;
   bottom: 0;
@@ -42,5 +43,6 @@ export const Attention = styled("span")`
   left: 0;
   color: #00aaff;
   transition: opacity 144ms ease;
+  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
 `;

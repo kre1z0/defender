@@ -1,16 +1,20 @@
 import styled from "styled-components";
-import { H3, Chip as ChipUI, FieldValue as FieldValueUI } from "@evergis/ui";
+import { H3, Chip as ChipUI, FieldValue as FieldValueUI, PaginationSimple as PaginationSimpleUI } from "@evergis/ui";
 
 import { Blank } from "../../components/Atoms/Blank";
 
 export const CardContainer = styled(Blank)`
   max-width: 360px;
+  width: 100%;
   padding: 20px;
   position: absolute;
   z-index: 4;
   top: 20px;
   right: 20px;
   flex-direction: column;
+  transition: opacity 144ms ease;
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
 `;
 
 export const Header = styled("div")`
@@ -45,4 +49,8 @@ export const FieldValue = styled(FieldValueUI)`
   > span:first-of-type {
     display: block;
   }
+`;
+
+export const PaginationSimple = styled(PaginationSimpleUI)`
+  align-self: flex-start;
 `;

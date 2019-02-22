@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { SpatialProcessor } from "@evergis/sp-api/SpatialProcessor";
-import axios from "axios";
-// TODO fix evergis service modules side effects
 import { Bbox } from "sgis/Bbox";
 import { Polygon } from "sgis/features/Polygon";
 import { PointFeature } from "sgis/features/PointFeature";
@@ -14,6 +12,7 @@ import { StaticSourceService } from "evergis/services/StaticSourceService";
 import { TileService } from "evergis/services/TileService";
 
 import { MapWrapper } from "./styled";
+import { License } from "../../components/License/License";
 import { Filters } from "../../components/Filters/Filters";
 import { ObjectCard } from "../../components/ObjectCard/ObjectCard";
 import { Controls } from "../../components/Atoms/Controls";
@@ -50,34 +49,13 @@ export class Map extends Component {
     resolution: 200,
     zoomLvl: 9,
     selectedFilter: "1",
-    selectedType: "fish"
+    selectedType: "fish",
+    selectedObjectIndex: 0,
+    objects: []
   };
 
   componentDidMount() {
     this.init();
-  }
-
-  init() {
-    const { resolution, selectedType, selectedFilter } = this.state;
-
-    const sp = new SpatialProcessor({
-      url: "http://public.everpoint.ru/sp/",
-      services: [layerStamenToner, layers[selectedFilter][selectedType]],
-      mapWrapper: this.wrapper,
-      resolution
-    });
-
-    const { map, painter, layerManager, controllerManager } = sp;
-
-    map.maxResolution = 9444;
-    map.on("bboxChangeEnd", this.onBboxChangeEnd);
-    map.on("click", this.onMapClick);
-    this.map = map;
-
-    this.sp = sp;
-    this.painter = painter;
-    this.layerManager = layerManager;
-    this.controller = controllerManager;
   }
 
   componentWillUnmount() {
@@ -96,6 +74,29 @@ export class Map extends Component {
       this.filterLayersByValue(prevSelectedFilter);
     }
   }
+
+  setObjects = features => {
+    const objects = [];
+    features.forEach(({ attributes, bbox }) => {
+      const { name, address, site, site_2gis, phone, rubrics_te } = attributes;
+      const { xMin, xMax, yMax, yMin } = bbox;
+      objects.push({
+        name,
+        address,
+        site,
+        site_2gis,
+        phone,
+        rubrics_te,
+        extent: {
+          xMin,
+          xMax,
+          yMax,
+          yMin
+        }
+      });
+    });
+    this.setState({ objects, selectedObjectIndex: 0 });
+  };
 
   onMapClick = ({ point }) => {
     const { selectedFilter, selectedType } = this.state;
@@ -119,59 +120,36 @@ export class Map extends Component {
       { crs: point.crs }
     );
 
-    geometry.symbol.type = "SimplePolygonSymbol";
-
-    // const geometry = new PointFeature([point.y, point.x], { crs: point.crs });
-
-    const normilizeBody = data => {
-      if (data instanceof FormData || typeof data === "string") {
-        return data;
-      } else {
-        return JSON.stringify(data);
-      }
-    };
-
-    axios
-      .get("http://public.everpoint.ru/sp/api/data/pickByGeometry", {
-        geom: [geometry],
-        res: resolution,
-        services: [service],
-        tol: 20
+    this.sp.connector.api
+      .pickByGeometry({
+        geometry,
+        resolution,
+        services: [service]
       })
-      .then(res => {
-        const body = normilizeBody(res.body);
-        console.info("--> res data ggwp", res);
-        console.info("--> body ggwp 4444", body);
-      })
-      .catch(error => console.info("--> error ggwp 4444", error));
-    //
-    // this.sp.connector.api
-    //   .pickByGeometry({
-    //     geometry,
-    //     resolution,
-    //     services: [service]
-    //   })
-    //   .then(res => {
-    //     console.info("--> ggwp 4444", res);
-    //   })
-    //   .catch(error => {
-    //     console.info("--> error ggwp 4444", error);
-    //   });
-
-    const objectSelector = this.controller.getController("objectSelector");
-
-    // objectSelector["pickByGeometry"]({
-    //   geometry,
-    //   resolution,
-    //   services: servicesNames
-    // })
-    //   .then(res => {
-    //     console.info("--> res ggwp 4444", res);
-    //   })
-    //   .catch(error => {
-    //     console.info("--> error ggwp 4444", error);
-    //   });
+      .then(features => this.setObjects(features))
+      .catch(error => console.error(error));
   };
+
+  init() {
+    const { resolution, selectedType, selectedFilter } = this.state;
+
+    const sp = new SpatialProcessor({
+      url: "http://public.everpoint.ru/sp/",
+      services: [layerStamenToner, layers[selectedFilter][selectedType]],
+      mapWrapper: this.wrapper,
+      resolution
+    });
+
+    const { map, painter, layerManager } = sp;
+
+    map.maxResolution = 9444;
+    map.on("bboxChangeEnd", this.onBboxChangeEnd);
+    map.on("click", this.onMapClick);
+    this.map = map;
+    this.sp = sp;
+    this.painter = painter;
+    this.layerManager = layerManager;
+  }
 
   filterLayersByType = prevType => {
     const { selectedFilter, selectedType } = this.state;
@@ -219,14 +197,18 @@ export class Map extends Component {
 
   onBboxChangeEnd = () => {
     const resolution = this.map.resolution;
-
     const zoomLvl = this.getLevel(resolution);
+    const isGridZoomLvl = zoomLvl < 14 || zoomLvl === 0;
 
     this.setState({
       zoomLvl: this.getLevel(resolution),
       resolution,
       selectedType: zoomLvl < 14 || zoomLvl === 0 ? "fish" : "poi"
     });
+
+    if (isGridZoomLvl) {
+      this.onCloseObjectCard();
+    }
   };
 
   onRefMapWrapper = ref => (this.wrapper = ref);
@@ -234,6 +216,8 @@ export class Map extends Component {
   onZoom = value => {
     this.map.zoom(value);
   };
+
+  onZoomToPoints = () => this.map.animateTo(new PointFeature([55.7417, 37.6275]), 8);
 
   getLevel = resolution => {
     const index = this.map && this.map.tileScheme.getLevel(resolution);
@@ -245,40 +229,45 @@ export class Map extends Component {
 
   onFilterChange = selectedFilter => {
     this.setState({ selectedFilter });
+    this.onCloseObjectCard();
   };
 
-  zoomToFeature = () => {
-    const extent = {
-      // xmin: currentTreeItem.Envelope.MinX,
-      // ymin: currentTreeItem.Envelope.MinY,
-      // xmax: currentTreeItem.Envelope.MaxX,
-      // ymax: currentTreeItem.Envelope.MaxY,
-      xmin: 44,
-      ymin: 45,
-      xmax: 22,
-      ymax: 14
-    };
-
-    const { xmin, xmax, ymax, ymin } = extent;
-    const bbox = new Bbox([xmin, ymax], [xmax, ymin], this.map.crs);
+  zoomToFeature = extent => {
+    const { xMin, xMax, yMax, yMin } = extent;
+    const bbox = new Bbox([xMin, yMax], [xMax, yMin], this.map.crs);
     this.painter.show(bbox, true);
   };
 
-  onCloseObjectCard = () => {
-    console.info("--> onCloseObjectCard ggwp");
-  };
+  onCloseObjectCard = () => this.setState({ selectedObjectIndex: 0, objects: [] });
 
   render() {
-    const { resolution, zoomLvl, selectedFilter, selectedType } = this.state;
+    const { resolution, zoomLvl, selectedFilter, selectedType, objects, selectedObjectIndex } = this.state;
+
+    const isGridType = selectedType === "fish";
 
     return (
       <MapWrapper innerRef={this.onRefMapWrapper}>
-        <Filters value={selectedFilter} onFilterChange={this.onFilterChange} selectedType={selectedType} />
-        <ObjectCard zoomToFeature={this.zoomToFeature} onClose={this.onCloseObjectCard} />
+        <Filters
+          isVisible={isGridType}
+          value={selectedFilter}
+          onFilterChange={this.onFilterChange}
+          onZoomToPoints={this.onZoomToPoints}
+        />
+        <ObjectCard
+          isVisible={objects.length}
+          currentPage={selectedObjectIndex + 1}
+          pageCount={objects.length}
+          zoomToFeature={this.zoomToFeature}
+          onClose={this.onCloseObjectCard}
+          onPrevObject={() => this.setState({ selectedObjectIndex: selectedObjectIndex - 1 })}
+          onNextObject={() => this.setState({ selectedObjectIndex: selectedObjectIndex + 1 })}
+          {...objects[selectedObjectIndex]}
+        />
         <Controls>
           <ScaleControl zoomLvl={zoomLvl} onZoom={this.onZoom} resolution={resolution} />
-          <GridLegend />
+          <GridLegend isVisible={isGridType} />
         </Controls>
+        <License />
       </MapWrapper>
     );
   }

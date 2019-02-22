@@ -8,6 +8,8 @@ export const GridLegendContainer = styled(Blank)`
   padding: 0 20px;
   flex-direction: column;
   justify-content: center;
+  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
 `;
 
 export const ColorsContainer = styled("div")`

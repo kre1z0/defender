@@ -11,12 +11,14 @@ const filters = [
   { id: "5", label: "Стиль", icon: "phone", iconCode: "\\e97c" }
 ];
 
-export const Filters = ({ value, onFilterChange, selectedType }) => {
+export const Filters = ({ value, onFilterChange, onZoomToPoints, isVisible }) => {
   return (
     <FiltersContainer>
       <Title>
         Праздничное наступление
-        <Attention isVisible={selectedType === "fish"}>Приблизьте карту, чтобы увидеть объекты</Attention>
+        <Attention isVisible={isVisible} onClick={() => onZoomToPoints()}>
+          Приблизьте карту, чтобы увидеть объекты
+        </Attention>
       </Title>
       {filters.map(({ id, label, icon, iconCode }) => (
         <FilterItem key={id} onClick={() => onFilterChange(id)} iconCode={iconCode}>
