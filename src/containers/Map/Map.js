@@ -79,8 +79,11 @@ export class Map extends Component {
     this.map.off("click", this.onMapClick);
   }
 
-  componentDidUpdate(prevProps, { selectedType: prevSelectedType, selectedFilter: prevSelectedFilter }) {
-    const { selectedType, selectedFilter } = this.state;
+  componentDidUpdate(
+    prevProps,
+    { selectedType: prevSelectedType, selectedFilter: prevSelectedFilter, selectedObjectIndex: prevSelectedObjectIndex }
+  ) {
+    const { selectedType, selectedFilter, selectedObjectIndex, objects } = this.state;
 
     if (prevSelectedType !== selectedType) {
       this.filterLayersByType(prevSelectedType);
@@ -89,18 +92,30 @@ export class Map extends Component {
     if (prevSelectedFilter !== selectedFilter) {
       this.filterLayersByValue(prevSelectedFilter);
     }
+
+    if (prevSelectedObjectIndex !== selectedObjectIndex) {
+      const nextObject = objects[selectedObjectIndex];
+      const nextPosition = nextObject && nextObject.position;
+
+      if (nextPosition) {
+        this.setSelectedSymbol(nextPosition);
+      }
+    }
   }
 
   setObjects = features => {
     const objects = [];
-    features.forEach(feature => {
+    features.forEach((feature, index) => {
       const { attributes, bbox, position } = feature;
       const { name, address, site, site_2gis, phone, rubrics_te } = attributes;
       const { xMin, xMax, yMax, yMin } = bbox;
 
-      this.setSelectedSymbol(position);
+      if (index === 0) {
+        this.setSelectedSymbol(position);
+      }
 
       objects.push({
+        position,
         name,
         address,
         site,

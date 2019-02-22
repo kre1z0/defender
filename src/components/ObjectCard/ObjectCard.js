@@ -43,9 +43,9 @@ export const ObjectCard = props => {
         {rubrics && rubrics.map((rubric, index) => <Chip key={`${rubric}-${index}`} text={rubric} />)}
       </ChipsContainer>
       <FieldValue field="Адрес" value={address} />
-      <FieldValue field="Телефон" value={phone} />
       {site && site !== "-" && <FieldValue field="Сайт" value={<OutsideLink href={site}>{site}</OutsideLink>} />}
-      <OutsideLink href={site_2gis}>Смотреть на 2GIS</OutsideLink>
+      {phone && phone !== "-" && <FieldValue field="Телефон" value={phone} />}
+      {site_2gis && site_2gis !== "-" && <OutsideLink href={site_2gis}>Смотреть на 2GIS</OutsideLink>}
     </CardContainer>
   );
 };

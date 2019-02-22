@@ -5,13 +5,13 @@ import { LicenseContainer } from "./styled";
 export const License = () => {
   return (
     <LicenseContainer>
-      Данные предоставлены{" "}
-      <a href="https://2gis.ru" target="_blank">
-        2GIS
-      </a>{" "}
-      | Работает на API{" "}
+      Работает на API{" "}
       <a href="http://www.everpoint.ru/#&panel1-1" target="_blank">
         EverGIS
+      </a>{" "}
+      | Данные предоставлены{" "}
+      <a href="https://2gis.ru" target="_blank">
+        2GIS
       </a>{" "}
       | Map tiles by{" "}
       <a href="http://stamen.com" target="_blank">
