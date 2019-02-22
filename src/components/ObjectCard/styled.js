@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { H3 } from "@evergis/ui";
+import { H3, Chip as ChipUI, FieldValue as FieldValueUI } from "@evergis/ui";
 
 import { Blank } from "../../components/Atoms/Blank";
 
@@ -15,16 +15,34 @@ export const CardContainer = styled(Blank)`
 
 export const Header = styled("div")`
   display: flex;
-  align-items: center;
   margin: 0 0 5px 0;
 `;
 
 export const Title = styled(H3)`
   margin: 0;
-  flex-shrink: 0;
   flex-grow: 1;
+  display: flex;
+  align-items: center;
 `;
 
 export const ChipsContainer = styled("div")`
   display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+`;
+
+export const Chip = styled(ChipUI)`
+  margin-right: 10px;
+  margin-bottom: 10px;
+`;
+
+export const FieldValue = styled(FieldValueUI)`
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 20px;
+  > span:first-of-type {
+    display: block;
+  }
 `;

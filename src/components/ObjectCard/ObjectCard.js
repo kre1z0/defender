@@ -1,25 +1,26 @@
 import React from "react";
-import { Chip, IconButton } from "@evergis/ui";
+import { IconButton } from "@evergis/ui";
 
-import { CardContainer, Header, Title, ChipsContainer } from "./styled";
+import { OutsideLink } from "../../components/Atoms/OutsideLink";
+import { CardContainer, Header, Title, ChipsContainer, Chip, FieldValue } from "./styled";
 
-export const ObjectCard = ({ title }) => {
+export const ObjectCard = ({ title, zoomToFeature, onClose }) => {
   return (
     <CardContainer>
       <Header>
-        <Title>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet aspernatur corporis cupiditate, doloribus
-          ducimus excepturi harum libero nesciunt nobis odit officiis quas quis quo reiciendis, saepe sequi temporibus
-          unde ut!
-        </Title>
-        <IconButton kind="zoom-to" />
-        <IconButton kind="close" />
+        <Title>Супербар</Title>
+        <IconButton kind="zoom-to" onClick={zoomToFeature} />
+        <IconButton kind="close" onClick={onClose} />
       </Header>
       <ChipsContainer>
         <Chip text="Парки для водных видов спорта" />
         <Chip text="Спортивные секции" />
         <Chip text="Фитнес-клубы" />
       </ChipsContainer>
+      <FieldValue field="Адрес" value="г. Москва, ул. Куйбышева, д. 23, стр.2" />
+      <FieldValue field="Телефон" value="+7 (495) 666 66 66" />
+      <FieldValue field="Сайт" value={<OutsideLink>www.coolbar.ru</OutsideLink>} />
+      <OutsideLink href="https://2gis.ru/moscow">Смотреть на 2GIS</OutsideLink>
     </CardContainer>
   );
 };
