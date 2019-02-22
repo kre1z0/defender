@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Blank } from "../../components/Atoms/Blank";
 
 export const ScaleControlContainer = styled(Blank)`
-  width: 214px;
+  width: 224px;
   margin-right: 10px;
   padding: 0 15px 0 5px;
   align-items: center;

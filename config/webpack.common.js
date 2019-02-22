@@ -107,11 +107,11 @@ module.exports = {
       }
     }),
     new HTMLPlugin({
-      title: "Где и как отметить 23 февраля в Москве",
+      title: "Где отдыхать мужчинам в Москве",
       template,
       minify: true,
       filename: "index.html",
-      favicon: "public/favicon.png"
+      favicon: "public/favicon.ico"
     }),
     new WebpackCdnPlugin({
       modules: [
