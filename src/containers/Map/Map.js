@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { SpatialProcessor } from "@evergis/sp-api/SpatialProcessor";
-import axios from "axios";
 // TODO fix evergis service modules side effects
 import { Bbox } from "sgis/Bbox";
 import { Polygon } from "sgis/features/Polygon";
@@ -119,38 +118,9 @@ export class Map extends Component {
       { crs: point.crs }
     );
 
-    // const geometry = new PointFeature([point.y, point.x], { crs: point.crs });
-
-    const normilizeBody = data => {
-      if (data instanceof FormData || typeof data === "string") {
-        return data;
-      } else {
-        return JSON.stringify(data);
-      }
-    };
-
-    // axios
-    //   .get("http://public.everpoint.ru/sp/api/data/pickByGeometry", {
-    //     geom: [
-    //       [point.x - buffer, point.y - buffer],
-    //       [point.x + buffer, point.y - buffer],
-    //       [point.x + buffer, point.y + buffer],
-    //       [point.x - buffer, point.y + buffer]
-    //     ],
-    //     res: resolution,
-    //     services: [service],
-    //     tol: 20
-    //   })
-    //   .then(res => {
-    //     const body = normilizeBody(res.body);
-    //     console.info("--> res data ggwp", res);
-    //     console.info("--> body ggwp 4444", body);
-    //   })
-    //   .catch(error => console.info("--> error ggwp 4444", error));
-
     this.sp.connector.api
       .pickByGeometry({
-        geometry: [point.y, point.x],
+        geometry,
         resolution,
         services: [service]
       })
@@ -160,20 +130,6 @@ export class Map extends Component {
       .catch(error => {
         console.info("--> error ggwp 4444", error);
       });
-
-    const objectSelector = this.controller.getController("objectSelector");
-
-    // objectSelector["pickByGeometry"]({
-    //   geometry,
-    //   resolution,
-    //   services: servicesNames
-    // })
-    //   .then(res => {
-    //     console.info("--> res ggwp 4444", res);
-    //   })
-    //   .catch(error => {
-    //     console.info("--> error ggwp 4444", error);
-    //   });
   };
 
   filterLayersByType = prevType => {
