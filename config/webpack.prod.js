@@ -10,7 +10,7 @@ module.exports = merge(common, {
     app: [entry]
   },
   output: {
-    publicPath: "/"
+    publicPath: "./"
   },
   devtool: "source-map",
   plugins: [new CleanWebpackPlugin([dist], { root })]

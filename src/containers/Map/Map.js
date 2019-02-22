@@ -65,9 +65,9 @@ export class Map extends Component {
     const resolution = this.map.resolution;
 
     this.layerManager.getServices(true).forEach(({ layer }, index) => {
-      if (index === 2) {
-        layer.isDisplayed = false;
-      }
+      // if (index === 2) {
+      //   layer.isDisplayed = false;
+      // }
     });
 
     this.setState({
