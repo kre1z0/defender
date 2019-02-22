@@ -119,6 +119,8 @@ export class Map extends Component {
       { crs: point.crs }
     );
 
+    geometry.symbol.type = "SimplePolygonSymbol";
+
     // const geometry = new PointFeature([point.y, point.x], { crs: point.crs });
 
     const normilizeBody = data => {
@@ -129,37 +131,32 @@ export class Map extends Component {
       }
     };
 
-    // axios
-    //   .get("http://public.everpoint.ru/sp/api/data/pickByGeometry", {
-    //     geom: [
-    //       [point.x - buffer, point.y - buffer],
-    //       [point.x + buffer, point.y - buffer],
-    //       [point.x + buffer, point.y + buffer],
-    //       [point.x - buffer, point.y + buffer]
-    //     ],
-    //     res: resolution,
-    //     services: [service],
-    //     tol: 20
-    //   })
-    //   .then(res => {
-    //     const body = normilizeBody(res.body);
-    //     console.info("--> res data ggwp", res);
-    //     console.info("--> body ggwp 4444", body);
-    //   })
-    //   .catch(error => console.info("--> error ggwp 4444", error));
-
-    this.sp.connector.api
-      .pickByGeometry({
-        geometry: [point.y, point.x],
-        resolution,
-        services: [service]
+    axios
+      .get("http://public.everpoint.ru/sp/api/data/pickByGeometry", {
+        geom: [geometry],
+        res: resolution,
+        services: [service],
+        tol: 20
       })
       .then(res => {
-        console.info("--> ggwp 4444", res);
+        const body = normilizeBody(res.body);
+        console.info("--> res data ggwp", res);
+        console.info("--> body ggwp 4444", body);
       })
-      .catch(error => {
-        console.info("--> error ggwp 4444", error);
-      });
+      .catch(error => console.info("--> error ggwp 4444", error));
+    //
+    // this.sp.connector.api
+    //   .pickByGeometry({
+    //     geometry,
+    //     resolution,
+    //     services: [service]
+    //   })
+    //   .then(res => {
+    //     console.info("--> ggwp 4444", res);
+    //   })
+    //   .catch(error => {
+    //     console.info("--> error ggwp 4444", error);
+    //   });
 
     const objectSelector = this.controller.getController("objectSelector");
 
@@ -272,11 +269,11 @@ export class Map extends Component {
   };
 
   render() {
-    const { resolution, zoomLvl, selectedFilter } = this.state;
+    const { resolution, zoomLvl, selectedFilter, selectedType } = this.state;
 
     return (
       <MapWrapper innerRef={this.onRefMapWrapper}>
-        <Filters value={selectedFilter} onFilterChange={this.onFilterChange} />
+        <Filters value={selectedFilter} onFilterChange={this.onFilterChange} selectedType={selectedType} />
         <ObjectCard zoomToFeature={this.zoomToFeature} onClose={this.onCloseObjectCard} />
         <Controls>
           <ScaleControl zoomLvl={zoomLvl} onZoom={this.onZoom} resolution={resolution} />

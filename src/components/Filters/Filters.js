@@ -1,22 +1,25 @@
 import React from "react";
 import { IconToggle } from "@evergis/ui";
 
-import { FiltersContainer, Title, FilterItem, Label } from "./styled";
+import { FiltersContainer, Title, FilterItem, Label, Attention } from "./styled";
 
 const filters = [
-  { id: "1", label: "Поесть и выпить", icon: "password-show" },
-  { id: "2", label: "Спорт и экстрим", icon: "share" },
-  { id: "3", label: "Развлечения и хобби", icon: "phone" },
-  { id: "4", label: "Релакс", icon: "social_github" },
-  { id: "5", label: "Стиль", icon: "image" }
+  { id: "1", label: "Поесть и выпить", icon: "phone", iconCode: "\\e978" },
+  { id: "2", label: "Спорт и экстрим", icon: "phone", iconCode: "\\e97d" },
+  { id: "3", label: "Развлечения и хобби", icon: "phone", iconCode: "\\e97a" },
+  { id: "4", label: "Релакс", icon: "phone", iconCode: "\\e97b" },
+  { id: "5", label: "Стиль", icon: "phone", iconCode: "\\e97c" }
 ];
 
-export const Filters = ({ value, onFilterChange }) => {
+export const Filters = ({ value, onFilterChange, selectedType }) => {
   return (
     <FiltersContainer>
-      <Title>Праздничное наступление</Title>
-      {filters.map(({ id, label, icon }) => (
-        <FilterItem key={id} onClick={() => onFilterChange(id)}>
+      <Title>
+        Праздничное наступление
+        <Attention isVisible={selectedType === "fish"}>Приблизьте карту, чтобы увидеть объекты</Attention>
+      </Title>
+      {filters.map(({ id, label, icon, iconCode }) => (
+        <FilterItem key={id} onClick={() => onFilterChange(id)} iconCode={iconCode}>
           <IconToggle kind={icon} accent isSelected={id === value} />
           <Label>{label}</Label>
         </FilterItem>
