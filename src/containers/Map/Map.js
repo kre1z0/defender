@@ -104,33 +104,39 @@ export class Map extends Component {
   }
 
   setObjects = features => {
-    const objects = [];
-    features.forEach((feature, index) => {
-      const { attributes, bbox, position } = feature;
-      const { name, address, site, site_2gis, phone, rubrics_te } = attributes;
-      const { xMin, xMax, yMax, yMin } = bbox;
+    if (features.length === 0) {
+      this.layer.features = [];
+      this.setState({ objects: [], selectedObjectIndex: 0 });
+    } else {
+      const objects = [];
+      features.forEach((feature, index) => {
+        const { attributes, bbox, position } = feature;
+        const { name, address, site, site_2gis, phone, rubrics_te } = attributes;
+        const { xMin, xMax, yMax, yMin } = bbox;
 
-      if (index === 0) {
-        this.setSelectedSymbol(position);
-      }
-
-      objects.push({
-        position,
-        name,
-        address,
-        site,
-        site_2gis,
-        phone,
-        rubrics_te,
-        extent: {
-          xMin,
-          xMax,
-          yMax,
-          yMin
+        if (index === 0) {
+          this.setSelectedSymbol(position);
         }
+
+        objects.push({
+          position,
+          name,
+          address,
+          site,
+          site_2gis,
+          phone,
+          rubrics_te,
+          extent: {
+            xMin,
+            xMax,
+            yMax,
+            yMin
+          }
+        });
       });
-    });
-    this.setState({ objects, selectedObjectIndex: 0 });
+
+      this.setState({ objects, selectedObjectIndex: 0 });
+    }
   };
 
   setSelectedSymbol = position => {
