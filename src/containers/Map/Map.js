@@ -270,7 +270,7 @@ export class Map extends Component {
   getLevel = resolution => {
     const index = this.map && this.map.tileScheme.getLevel(resolution);
 
-    if (index) {
+    if (Number.isInteger(+index)) {
       return this.map.tileScheme.levels[index].zIndex;
     }
   };
